@@ -1,0 +1,74 @@
+---
+title: "Lactate Testing Report"
+author: "Jeff Shilt"
+date: "2023-02-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+#Load Libraries and Data
+library(tidyverse)
+library(here)
+library(lactater)
+
+Data = read_csv(here("TCH Data/JS.2.23.23.csv"))
+
+```
+# Lactate Turning Point (LTP)
+Lactate Turning Point 1 (LTP1) and Lactate Turning Point 2 (LTP2)
+the lactate response is divided into three segments. A segmented regression is performed
+such that the lactate curve yields two breaking points. The first breaking point, representing
+the first rise in lactate above resting levels, is considered as LTP1. The second breaking point,
+representing an accelerated lactate accumulation, is then considered as LTP2
+(Hofmann & Tschakert, 2017; Hofmann et al., 1997; Pokan et al., 1997).
+Caution: this method might require a double-check via a visual inspection, depending in some cases.
+
+```{r echo=FALSE}
+results_ltp <- lactate_threshold(
+  .data = Data,
+  intensity_column = "intensity", 
+  lactate_column = "lactate", 
+  heart_rate_column = "heart_rate",
+  method = "LTP",
+  fit = "3rd degree polynomial", 
+  include_baseline = TRUE, 
+  sport = "cycling",
+  plot = TRUE
+)
+```
+```{r echo=FALSE}
+LTP1plot = results_ltp$plot[[1]]
+LTP2plot = results_ltp$plot[[2]]
+
+dataInterp = LTP2plot$plot_env$data_interpolated
+dataFitted = LTP2plot$plot_env$fitted_values
+dataRaw = LTP2plot$plot_env$data
+
+LTP1point = LTP1plot$plot_env$breakpoint_y_value
+LTP2point = LTP2plot$plot_env$breakpoint_y_value
+
+LTP1pointX= dataFitted[which.min(abs(LTP1point-dataFitted$value)),]
+LTP2pointX= dataFitted[which.min(abs(LTP2point-dataFitted$value)),]
+
+x_labels = LTP1plot$plot_env$breaks_and_labels$labels
+x_breaks = LTP1plot$plot_env$breaks_and_labels$breaks
+
+```
+
+```{r echo=FALSE, fig.width=10, fig.height=5}
+ggplot() + 
+  geom_line(data=dataFitted, aes(x=intensity, y=value) ,color = "red") + 
+  geom_point(data=dataRaw, aes(x=intensity, y=lactate), size = 5, alpha = 0.2, colour = "gray")+
+  geom_point(aes(x=LTP1pointX$intensity, y=LTP1point), size = 5, alpha = 0.3, colour="blue")+
+  geom_point(aes(x=LTP2pointX$intensity, y=LTP2point), size = 5, alpha = 0.3, colour="blue")+
+  #scale_x_continuous(name="Power (W)", breaks=seq(100,300,20)) +
+  scale_x_continuous(name = "Power (W)", breaks = x_breaks, labels = x_labels) +
+  ylab("Blood Lactate (mmol/L)")+
+  ggtitle("Lactate Turning Points (LTP1 & LTP2)")+
+  theme_light()
+```
+

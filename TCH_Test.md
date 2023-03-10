@@ -53,6 +53,15 @@ demo_data
 #> 8    7      2       191    8.64        198
 ```
 
+## Get Additional Data Sets
+
+``` r
+library(here)
+library(tidyverse)
+
+DS = read_csv(here("TCH Data/JS.2.23.23.csv"))
+```
+
 ## Usage
 
 With `lactater` you can easily estimate lactate thresholds using one or
@@ -60,7 +69,8 @@ multiple methods:
 
 ``` r
 results_overall <- lactate_threshold(
-  .data = demo_data, 
+  #.data = demo_data, 
+  .data = DS, 
   intensity_column = "intensity", 
   lactate_column = "lactate", 
   heart_rate_column = "heart_rate",
@@ -75,26 +85,26 @@ results_overall <- lactate_threshold(
     #> # A tibble: 17 × 7
     #>    method_category method           fitting        inten…¹ lactate heart…² plot 
     #>    <fct>           <fct>            <chr>            <dbl>   <dbl>   <dbl> <lis>
-    #>  1 Log-log         Log-log          3rd degree po…    83.4    1.4      140 <gg> 
-    #>  2 OBLA            OBLA 2.0         3rd degree po…   105.     2        153 <gg> 
-    #>  3 OBLA            OBLA 2.5         3rd degree po…   118.     2.5      160 <gg> 
-    #>  4 OBLA            OBLA 3.0         3rd degree po…   129      3        167 <gg> 
-    #>  5 OBLA            OBLA 3.5         3rd degree po…   137      3.5      171 <gg> 
-    #>  6 OBLA            OBLA 4.0         3rd degree po…   145      4        176 <gg> 
-    #>  7 Bsln+           Bsln + 0.5       3rd degree po…    82.5    1.43     139 <gg> 
-    #>  8 Bsln+           Bsln + 1.0       3rd degree po…   104.     1.93     152 <gg> 
-    #>  9 Bsln+           Bsln + 1.5       3rd degree po…   117.     2.43     159 <gg> 
-    #> 10 Dmax            Dmax             3rd degree po…   132.     3.1      168 <gg> 
-    #> 11 Dmax            ModDmax          3rd degree po…   140.     3.6      173 <gg> 
-    #> 12 Dmax            Exp-Dmax         Exponential (…   135.     3.3      170 <gg> 
-    #> 13 Dmax            Log-Poly-ModDmax 3rd degree po…   143      3.8      175 <gg> 
-    #> 14 Dmax            Log-Exp-ModDmax  Exponential (…   146.     4        177 <gg> 
-    #> 15 LTP             LTP1             3rd degree po…    88.9    1.5      143 <gg> 
-    #> 16 LTP             LTP2             3rd degree po…   148.     4.1      178 <gg> 
-    #> 17 LTratio         LTratio          B-Spline (def…    71.2    1.2      132 <gg> 
+    #>  1 Log-log         Log-log          3rd degree po…    226.     1.9     152 <gg> 
+    #>  2 OBLA            OBLA 2.0         3rd degree po…    228.     2       153 <gg> 
+    #>  3 OBLA            OBLA 2.5         3rd degree po…    240.     2.5     157 <gg> 
+    #>  4 OBLA            OBLA 3.0         3rd degree po…    247.     3       160 <gg> 
+    #>  5 OBLA            OBLA 3.5         3rd degree po…    254      3.5     162 <gg> 
+    #>  6 OBLA            OBLA 4.0         3rd degree po…    260.     4       165 <gg> 
+    #>  7 Bsln+           Bsln + 0.5       3rd degree po…    120.     1.2     111 <gg> 
+    #>  8 Bsln+           Bsln + 1.0       3rd degree po…    220.     1.7     150 <gg> 
+    #>  9 Bsln+           Bsln + 1.5       3rd degree po…    233.     2.2     155 <gg> 
+    #> 10 Dmax            Dmax             3rd degree po…    231.     1.9     154 <gg> 
+    #> 11 Dmax            ModDmax          3rd degree po…    231.     1.9     154 <gg> 
+    #> 12 Dmax            Exp-Dmax         Exponential (…    235.     2.1     155 <gg> 
+    #> 13 Dmax            Log-Poly-ModDmax 3rd degree po…    256.     3.5     163 <gg> 
+    #> 14 Dmax            Log-Exp-ModDmax  Exponential (…    258.     3.4     164 <gg> 
+    #> 15 LTP             LTP1             3rd degree po…    212.     1.5     147 <gg> 
+    #> 16 LTP             LTP2             3rd degree po…    261.     4       165 <gg> 
+    #> 17 LTratio         LTratio          B-Spline (def…    100      0.6     104 <gg> 
     #> # … with abbreviated variable names ¹​intensity, ²​heart_rate
 
-<img src="man/figures/readme/README-unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/readme/README-unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" />
 
 ## You can also choose one method:
 
@@ -120,7 +130,7 @@ results_loglog <- lactate_threshold(
     #> 1 Log-log         Log-log 3rd degree polynomial (…    83.4     1.4     140 <gg> 
     #> # … with abbreviated variable names ¹​intensity, ²​heart_rate
 
-<img src="man/figures/readme/README-unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/readme/README-unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
 
 ### OBLA
 
@@ -148,7 +158,7 @@ results_obla <- lactate_threshold(
     #> 5 OBLA            OBLA 4.0 3rd degree polynomial …    145      4       176 <gg> 
     #> # … with abbreviated variable names ¹​intensity, ²​heart_rate
 
-<img src="man/figures/readme/README-unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/readme/README-unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
 
 ### Bsln+
 
@@ -174,7 +184,7 @@ results_bsln_plus <- lactate_threshold(
     #> 3 Bsln+           Bsln + 1.5 3rd degree polynomia…   117.     2.43     159 <gg> 
     #> # … with abbreviated variable names ¹​intensity, ²​heart_rate
 
-<img src="man/figures/readme/README-unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/readme/README-unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
 
 ### Dmax
 
@@ -202,13 +212,14 @@ results_dmax <- lactate_threshold(
     #> 5 Dmax            Log-Exp-ModDmax  Exponential (d…    146.     4       177 <gg> 
     #> # … with abbreviated variable names ¹​intensity, ²​heart_rate
 
-<img src="man/figures/readme/README-unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/readme/README-unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" />
 
 ### LTP
 
 ``` r
 results_ltp <- lactate_threshold(
-  .data = demo_data, 
+  #.data = demo_data, 
+  .data = DS,
   intensity_column = "intensity", 
   lactate_column = "lactate", 
   heart_rate_column = "heart_rate",
@@ -223,11 +234,11 @@ results_ltp <- lactate_threshold(
     #> # A tibble: 2 × 7
     #>   method_category method fitting                   inten…¹ lactate heart…² plot 
     #>   <fct>           <fct>  <chr>                       <dbl>   <dbl>   <dbl> <lis>
-    #> 1 LTP             LTP1   3rd degree polynomial (u…    88.9     1.5     143 <gg> 
-    #> 2 LTP             LTP2   3rd degree polynomial (u…   148.      4.1     178 <gg> 
+    #> 1 LTP             LTP1   3rd degree polynomial (u…    212.     1.5     147 <gg> 
+    #> 2 LTP             LTP2   3rd degree polynomial (u…    261.     4       165 <gg> 
     #> # … with abbreviated variable names ¹​intensity, ²​heart_rate
 
-<img src="man/figures/readme/README-unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/readme/README-unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" />
 
 ### LTratio
 
@@ -250,7 +261,7 @@ results_ltratio <- lactate_threshold(
     #>   <fct>           <fct>   <chr>                  <dbl>   <dbl>      <dbl> <list>
     #> 1 LTratio         LTratio B-Spline (default)      71.2     1.2        132 <gg>
 
-<img src="man/figures/readme/README-unnamed-chunk-23-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/readme/README-unnamed-chunk-24-1.png" width="100%" style="display: block; margin: auto;" />
 
 ## Related work
 
